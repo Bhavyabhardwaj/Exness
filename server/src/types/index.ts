@@ -182,3 +182,66 @@ export interface AuthResponse {
     user: UserPublic;
     expiresIn: number;
 }
+
+// Api response types
+
+export interface ApiResponse<T = any> {
+    success: boolean;
+    data?: T;
+    error?: {
+        code: string;
+        message: string;
+        details: Record<string, any>;
+    }
+    timestamp: number;
+    requestId: string;
+};
+
+// Pagination types
+export interface PaginationMeta {
+    total: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+    hasMore: boolean;
+}
+
+export interface PaginatedResponse<T> {
+    items: T[];
+    meta: PaginationMeta;
+}
+
+// Audit Log Types
+export type AuditAction =
+    | 'ORDER_CREATED'
+    | 'ORDER_CANCELLED'
+    | 'POSITION_OPENED'
+    | 'POSITION_CLOSED'
+    | 'BALANCE_UPDATED'
+    | 'USER_LOGIN'
+    | 'USER_REGISTERED';
+
+
+// who did what and when
+export interface AuditLog {
+    id: string;
+    userId: string;
+    action: AuditAction;
+    metadata: Record<string, any>;
+    ipAddress: string;
+    userAgent: string;
+    createdAt: Date;
+}
+
+/**
+ * Job Queue Types
+ */
+export interface JobData {
+    [key: string]: any;
+}
+
+export interface JobResult {
+    success: boolean;
+    data?: any;
+    error?: string;
+}
