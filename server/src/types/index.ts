@@ -141,3 +141,44 @@ export interface PriceData {
     last: number;
     timestamp: number;
 }
+
+export interface PriceHistory {
+    id: string;
+    symbol: string;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
+    volume: number;
+    createdAt: Date;
+    timestamp: Date;
+}
+
+// Auth Types
+
+export interface AuthPayload {
+    userId: string;
+    email: string;
+    iat: number;
+    exp: number;
+}
+
+// Register and Login Requests
+
+export interface RegisterRequest {
+    email: string;
+    password: string;
+    confirmPassword: string;
+}
+
+export interface LoginRequest {
+    email: string;
+    password: string;
+}
+
+export interface AuthResponse {
+    token: string;
+    refreshToken: string;
+    user: UserPublic;
+    expiresIn: number;
+}
