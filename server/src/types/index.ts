@@ -88,20 +88,56 @@ export interface Position {
 }
 
 export interface PositionResponse {
-  id: string;
-  symbol: string;
-  quantity: number;
-  entryPrice: number;
-  currentPrice: number;
-  direction: OrderDirection;
-  unrealizedPL: number;
-  unrealizedPLPercent: number;
-  status: PositionStatus;
-  openedAt: Date;
+    id: string;
+    symbol: string;
+    quantity: number;
+    entryPrice: number;
+    currentPrice: number;
+    direction: OrderDirection;
+    unrealizedPL: number;
+    unrealizedPLPercent: number;
+    status: PositionStatus;
+    openedAt: Date;
 }
 
 // Trade types
 export interface Trade {
     id: string;
     userId: string;
+    orderId: string;
+    positionId: string;
+    symbol: string;
+    entryPrice: number;
+    exitPrice: number;
+    quantity: number;
+    direction: OrderDirection;
+    realizedPL: number;
+    fee: number;
+    netProfit: number;
+    createdAt: Date;
+    openedAt: Date;
+    closedAt: Date;
+}
+
+export interface TradeResponse {
+    id: string;
+    symbol: string;
+    quantity: number;
+    entryPrice: number;
+    exitPrice: number;
+    realizedPL: number;
+    fee: number;
+    duration: number;
+    netProfit: number;
+    openedAt: Date;
+    closedAt: Date;
+}
+
+// price types
+export interface PriceData {
+    symbol: string;
+    bid: number;
+    ask: number;
+    last: number;
+    timestamp: number;
 }
