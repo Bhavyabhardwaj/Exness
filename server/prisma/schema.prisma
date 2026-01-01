@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum OrderType {
+  MARKET
+  LIMIT
+  STOP
+}
+
+enum OrderSide {
+  BUY
+  SELL
+}
+
+enum OrderStatus {
+  PENDING
+  PARTIALLY_FILLED
+  FILLED
+  CANCELLED
+  REJECTED
+}
+
+enum PositionStatus {
+  OPEN
+  CLOSED
+}
+
+enum Direction {
+  LONG
+  SHORT
+}
+
+enum AuditAction {
+  ORDER_CREATED
+  ORDER_FILLED
+  ORDER_CANCELLED
+  ORDER_REJECTED
+  POSITION_OPENED
+  POSITION_CLOSED
+  BALANCE_UPDATED
+  USER_REGISTERED
+  USER_LOGIN
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  password  String
+  wallet    Wallet?
+  orders    Order[]
+  positions Position[]
+  trades    Trade[]
+  auditLogs AuditLog[]
+  updatedAt DateTime   @updatedAt
+  createdAt DateTime   @default(now())
+
+  @@index([email])
+  @@map("users")
+}
+
+model Wallet {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  balance       Decimal  @default(0)
+  frozenBalance Decimal  @default(0)
+  totalEquity   Decimal  @default(0)
+  user          User     @relation(fields: [userId], references: [id])
+  updatedAt     DateTime @updatedAt
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+  @@map("wallets")
+}
+
+model Order {
+  id           String    @id @default(uuid())
+  userId       String
+  symbol       String
+  quantity     Decimal   @db.Decimal(20, 8)
+  pricePerUnit Decimal   @db.Decimal(20, 8)
+  orderType    String
+  direction    String
+  status       String
+  createdAt    DateTime  @default(now())
+  filledAt     DateTime?
+  cancelledAt  DateTime?
+  updatedAt    DateTime  @updatedAt
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  positions Position[]
+  trades    Trade[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([symbol])
+  @@index([createdAt])
+  @@map("orders")
+}
