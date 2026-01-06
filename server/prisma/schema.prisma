@@ -92,7 +92,7 @@ model Order {
   pricePerUnit Decimal   @db.Decimal(20, 8)
   orderType    String
   direction    String
-  status       String
+  status       OrderStatus @default(PENDING)
   createdAt    DateTime  @default(now())
   filledAt     DateTime?
   cancelledAt  DateTime?
